@@ -41,6 +41,13 @@ const HomeScreen = () => {
   const onGoPress = () => {
     setIsOnline(!isOnline);
   };
+
+  const onUserLocationChange = (event) => {
+    console.log("userlocatonchange")
+    console.log(event.nativeEvent);
+
+  };
+
   const renderBottomTitle = () => {
     if (order) {
       return (
@@ -79,6 +86,7 @@ const HomeScreen = () => {
         style={{ width: "100%", height: Dimensions.get("window").height - 150 }}
         provider={PROVIDER_GOOGLE}
         showsUserLocation={true}
+        onUserLocationChange={onUserLocationChange}
         initialRegion={{
           latitude: 5.636052,
           longitude: -0.186665,
