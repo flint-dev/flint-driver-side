@@ -7,15 +7,17 @@ const styles = StyleSheet.create({
     bottom: 0,
     width: "100%",
     padding: 20,
-    height: 250,
+    height: '100%',
+    justifyContent:'space-between',
+    backgroundColor:"#00000099"
   },
   popupContainer: {
     backgroundColor: "black",
-    flex: 1,
+  
     borderRadius: 10,
     alignItems:'center',
-    justifyContent:'space-around'
-
+    justifyContent:'space-between',
+    height: 250,
 
   },
   minutes: {
@@ -42,6 +44,18 @@ const styles = StyleSheet.create({
       alignItems:'center',
       justifyContent:'center',
       borderRadius:60,
+  },
+  declineButton:{
+    backgroundColor:'black',
+    padding:20,
+    borderRadius:50,
+    width:100,
+    alignItems:'center'
+
+  },
+  declineText:{
+    color:'white',
+    fontWeight:'bold',
   }
 
 });

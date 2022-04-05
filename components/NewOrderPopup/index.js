@@ -1,24 +1,29 @@
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, Pressable } from "react-native";
 import React from "react";
 import styles from "./styles";
 import Icon from "react-native-vector-icons/Ionicons";
 
-const NewOrderPopup = () => {
+const NewOrderPopup = ({newOrder,onAccept,onDecline,duration,distance}) => {
+  
   return (
     <View style={styles.root}>
-      <View style={styles.popupContainer}>
+      <Pressable onPress={onDecline} style={styles.declineButton}>
+        <Text style={styles.declineText}>Decline</Text>
+      </Pressable>
+      <Pressable style={styles.popupContainer} onPress={onAccept}>
         <View style={styles.row}>
-          <Text style={styles.uberType}>UberX</Text>
+          <Text style={styles.uberType}>{newOrder.type}</Text>
           <View style={styles.userBg}>
             <Icon name="person" size={35} color="white" />
           </View>
           <Text style={styles.uberType}>
-            <Icon name="star" size={18} />5
+            <Icon name="star" size={18} />
+            {newOrder.user.rating}
           </Text>
         </View>
-        <Text style={styles.minutes}>2 min</Text>
-        <Text style={styles.distance}>0.2mi</Text>
-      </View>
+        <Text style={styles.minutes}>{duration} min</Text>
+        <Text style={styles.distance}>{distance}</Text>
+      </Pressable>
     </View>
   );
 };

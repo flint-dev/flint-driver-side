@@ -6,15 +6,71 @@ import styles from "./styles";
 import Icon from "react-native-vector-icons/Ionicons";
 import NewOrderPopup from "../../NewOrderPopup";
 
-const origin = { latitude: 37.3318456, longitude: -122.0296002 };
+const origin = { latitude: 5.637268, longitude: -0.184888 };
 const destination = { latitude: 37.771707, longitude: -122.4053769 };
 const GOOGLE_MAPS_APIKEY = "AIzaSyA7q0zF_2_rCjVuhRDn52NtkOcM3K7t53k";
 
 const HomeScreen = () => {
   const [isOnline, setIsOnline] = useState(false);
 
+  const [order, setOrder] = useState(null);
+
+  const [newOrder, setNewOrder] = useState({
+    id: "1",
+    type: "FlintX",
+    originLatitude: 5.636052,
+    originLongitude: -0.186665,
+
+    destLatitude: 5.637268,
+    destLongitude: -0.184888,
+
+    user: {
+      rating: 4.8,
+      name: "Mann",
+    },
+  });
+
+  const onDecline = () => {
+    setNewOrder(null);
+  };
+  const onAccept = (newOrder) => {
+    setOrder(newOrder);
+    setNewOrder(null);
+  };
+
   const onGoPress = () => {
     setIsOnline(!isOnline);
+  };
+  const renderBottomTitle = () => {
+    if (order) {
+      return (
+        <View style={{ alignItems: "center" }}>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <Text>1 min</Text>
+
+            <View
+              style={{
+                backgroundColor: "#1e9203",
+                marginHorizontal: 10,
+                width: 30,
+                height: 30,
+                alignItems: "center",
+                justifyContent: "center",
+                borderRadius: 20,
+              }}
+            >
+              <Icon name="person" size={20} color="white" />
+            </View>
+            <Text>0.2 mi</Text>
+          </View>
+          <Text style={styles.bottomText}>Picking up {order.user.name} </Text>
+        </View>
+      );
+    }
+    if (isOnline) {
+      return <Text style={styles.bottomText}>You're online</Text>;
+    }
+    return <Text style={styles.bottomText}>You're offline</Text>;
   };
 
   return (
@@ -30,11 +86,18 @@ const HomeScreen = () => {
           longitudeDelta: 0.0421,
         }}
       >
-        <MapViewDirections
-          origin={origin}
-          destination={destination}
-          apikey={GOOGLE_MAPS_APIKEY}
-        />
+        {order && (
+          <MapViewDirections
+            origin={origin}
+            destination={{
+              latitude: order.originLatitude,
+              longitude: order.originLongitude,
+            }}
+            apikey={GOOGLE_MAPS_APIKEY}
+            strokeWidth={5}
+            strokeColor="black"
+          />
+        )}
       </MapView>
 
       <Pressable
@@ -76,16 +139,20 @@ const HomeScreen = () => {
       <View style={styles.bottomContainer}>
         <Icon name="options" size={30} color="#4a4a4a" />
 
-        {isOnline ? (
-          <Text style={styles.bottomText}>You're online</Text>
-        ) : (
-          <Text style={styles.bottomText}>You're offline</Text>
-        )}
+        {renderBottomTitle()}
 
         <Icon name="menu" size={30} color="#4a4a4a" />
       </View>
 
-      <NewOrderPopup/>
+      {newOrder && (
+        <NewOrderPopup
+          newOrder={newOrder}
+          duration={2}
+          distance={0.5}
+          onDecline={onDecline}
+          onAccept={() => onAccept(newOrder)}
+        />
+      )}
     </View>
   );
 };
